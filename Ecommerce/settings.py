@@ -52,10 +52,21 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'Ecommerce.wsgi.application'
 
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'djongo',
+#         'NAME': 'ecommerce',
+#     }
+# }
+
 DATABASES = {
     'default': {
-        'ENGINE': 'djongo',
+        'ENGINE': 'django.db.backends.mysql',
         'NAME': 'ecommerce',
+        'USER': 'root',
+        'PASSWORD': '1234',
+        'HOST':'localhost',
+        'PORT':'3306',
     }
 }
 

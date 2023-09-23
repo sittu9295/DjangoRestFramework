@@ -65,7 +65,12 @@ class CustomerView(APIView):
 
             customer_data.save()
 
-        return Response({'response': 'success', 'message': 'Data Updated'})
+            return Response({'response': 'success', 'message': 'Data Updated'})
+        
+        else:
+            
+            return Response({'response': 'error', 'message': customer_data.errors})
+
     
     def delete(self, request, id):
 
@@ -125,3 +130,17 @@ class ProductView(APIView):
         product.delete()
 
         return Response({'response': 'success', 'message': 'Data Deleted'})
+
+
+class BillView(APIView):
+
+    def post(self, request):
+
+        data = request.data
+
+        bill_details = Bill(customer_id = data['customer_id'], bill_number = data['bill_number'], bill_date = data['bill_date'], gst = data['gst'])
+
+        bill_details.save()
+
+        return Response({'response': 'success', 'message': 'Data Saved'})
+

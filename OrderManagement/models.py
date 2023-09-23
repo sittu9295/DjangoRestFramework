@@ -33,6 +33,15 @@ class Bill(models.Model):
 
         return self.customer.customer_name
     
-# class BillMaterials(models.Model):
+class BillMaterials(models.Model):
 
-#     bill = models.ForeignKey(Bill, related_name='bill_products')
+    bill = models.ForeignKey(Bill, related_name='bill_products', on_delete=models.CASCADE)
+    product = models.ForeignKey(Product,null=True, on_delete=models.SET_NULL)
+    count = models.IntegerField(default=0)
+    subtotal = models.FloatField(default=0)
+
+    def __str__(self):
+        return self.bill.bill_number
+
+
+    
