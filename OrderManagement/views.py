@@ -134,6 +134,16 @@ class ProductView(APIView):
 
 class BillView(APIView):
 
+    def get(self, resquest, id=None):
+
+        if id == None:
+
+            bill = Bill.objects.all()
+
+            bill_data = Bill_Get_Serializer(bill, many=True).data
+
+            return Response({'response': 'success', 'data': bill_data})
+
     def post(self, request):
 
         data = request.data[0]
@@ -165,3 +175,39 @@ class BillView(APIView):
 
         return Response({'response': 'success', 'message': 'Data Saved'})
 
+    def patch(self, request, id):
+
+        data = request.data[0]
+        material_data = request.data[1]
+
+        bill_filter = Bill.objects.filter(id = id)
+
+        bill_filter.update(customer_id = data['customer_id'], bill_number = data['bill_number'], bill_date = data['bill_date'], gst = data['gst'])
+
+        final_subtotal = 0
+
+        for x in material_data:
+
+            product_price = Product.objects.get(id = x['product_id'])
+
+            subtotal_amount = product_price.price * x['count']
+
+            final_subtotal = final_subtotal + subtotal_amount
+
+            bill_materials_filter = BillMaterials.objects.filter(id = id)
+
+            bill_materials_filter.update(product_id = x['product_id'], count = x['count'], subtotal = subtotal_amount)
+
+        final_bill_amount = ((final_subtotal * data['gst']) / 100) + final_subtotal
+
+        bill_filter.update(total_amount = final_subtotal, bill_amount = final_bill_amount)
+
+        return Response({'response': 'success', 'message': 'Data Updated'})
+
+    def delete(self, request, id):
+
+        bill = Bill.objects.get(id = id)
+
+        bill.delete()
+
+        return Response({'response': 'success', 'message': 'Data Deleted'})

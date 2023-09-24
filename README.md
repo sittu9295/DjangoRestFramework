@@ -123,6 +123,22 @@
 
     Create two models bill and bill materials
     Bill materials have a foriegn relationship with bill and bill have a foriegn relationship with customer
+    
+    Create a class to write api for both linked models as a single unit
+
+    Post Method: one bill data can have one or more bill materials data, first write the code to save the bill data and now with the reference id of the bill save the bill materials data.
+
+    Get Method: 
+        1) Get All(id = None): create serializer for bill and bill materials and now create a combined serializer, with this combined serializer we can get a bill and it's materials in single api
+
+        2) Get By Id: use the same combined serializer, but now to get only selected bill and it's materials
+
+    Patch Method: bill and bill materials both can be updated with this single function
+
+    Delete Mehtod: Delete bill and it bill materials will be auto deleted because of ondelete cascade
+
+
+
 
 
 
