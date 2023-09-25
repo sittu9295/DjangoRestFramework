@@ -194,7 +194,7 @@ class BillView(APIView):
 
             final_subtotal = final_subtotal + subtotal_amount
 
-            bill_materials_filter = BillMaterials.objects.filter(id = id)
+            bill_materials_filter = BillMaterials.objects.filter(id = x['id'])
 
             bill_materials_filter.update(product_id = x['product_id'], count = x['count'], subtotal = subtotal_amount)
 
