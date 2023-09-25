@@ -134,7 +134,7 @@ class ProductView(APIView):
 
 class BillView(APIView):
 
-    def get(self, resquest, id=None):
+    def get(self, request, id=None):
 
         if id == None:
 
