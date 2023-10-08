@@ -1,0 +1,47 @@
+# Project Setup:
+
+    Create virtual environment : py -3 -m venv .venv
+    Activate the environment : .venv/Scripts/activate
+    Install django : pip install django
+    Install django rest framework : pip install djangorestframework
+    Create django project : django-admin startproject projectname .   [dot to mention current folder]
+
+    Add 'rest_framework' in the installed apps list in the setting file
+    Run server to check the basic setup is working : python manage.py runserver
+    Turn off the server with : Control + C
+
+# App Setup:
+
+    Create app to write api's : python manage.py startapp appname
+    Add appname in the installed apps list in the setting file
+    Create urls.py file in the app folder
+
+    URLS.PY SETUP:
+
+        Import path from django urls and views of the app
+        Declare urlpatterns variable and assign a empty list to it
+        Go to urls.py file in the project folder and import include from django urls
+        Include the app's urls in the project urls file
+        
+    Run server again to check the base routing setup.
+
+# Postman:
+
+    Install postman which will act as a client application that used to make a http request to a backed app
+
+
+# Database:
+
+    Run migrate command to add default models to database,
+    create a super user and test admin is working or not
+
+
+# Basic API's in App Views: [Http Request Methods: Get, Post, Patch, Put, Delete]
+
+    Import apiview and response form restframework
+
+    Create models and run make migrations and migrate command
+
+    Write separate api for each Methods
+
+

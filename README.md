@@ -32,7 +32,7 @@
 
 # Basic API's in App Views: [Http Request Methods: Get, Post, Patch, Put, Delete]
 
-    Import apiview and response for restframework
+    Import apiview and response form restframework
 
     Create a class that will be the container for all http request methods, which inherits apiview
 
@@ -49,7 +49,7 @@
 
     POST METHOD:
 
-        This method use to send the user submited data to backebd services
+        This method use to send the user submited data to backend
         Create a function inside the same class with name 'post' which takes request as a parameter
         Make a print to see the received data which located inside the request.data
         Write a dummy Response
