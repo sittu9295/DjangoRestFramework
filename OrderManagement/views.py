@@ -2,212 +2,276 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from .models import *
 from .serializers import *
+from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
+from rest_framework_simplejwt.views import TokenObtainPairView
 
-class BasicApiView(APIView):
-
-    def get(self, request):
-
-        user_data = {
-            "name": "Kishore",
-            "age": 25
-        }
-
-        return Response(user_data)
-    
-    def post(self, request):
-
-        print(request.data)
-
-        return Response("Data Saved")
-    
 
 class CustomerView(APIView):
 
-    def get(self, request, id=None):
+    def get(self, request, id = None):
 
         if id == None:
 
-            customer_all = Customer.objects.all()
+            all_customers = Customer.objects.all()
 
-            customer_data = Customer_Serializer(customer_all, many=True).data
+            all_customer_data = []
 
-            return Response({'response': 'success', 'data': customer_data})
+            for customer in all_customers:
+
+                customer_dataset = {
+                    "customer_name": customer.customer_name,
+                    "address": customer.address,
+                    "phone_number": customer.phone_number,
+                    "age": customer.age,
+                    "company_name": customer.company_name,
+                    "member_since": customer.member_since
+                }
+
+                all_customer_data.append(customer_dataset)
+
+            return Response(all_customer_data)
         
         else:
 
-            customer_get = Customer.objects.get(id=id)
+            selected_customer = Customer.objects.get(id = id)
 
-            customer_data = Customer_Serializer(customer_get).data
+            customer_dataset = {
+                "customer_name": selected_customer.customer_name,
+                "address": selected_customer.address,
+                "phone_number": selected_customer.phone_number,
+                "age": selected_customer.age,
+                "company_name": selected_customer.company_name,
+                "member_since": selected_customer.member_since
+            }
 
-            return Response({'response': 'success', 'data': customer_data})
-    
+            return Response(customer_dataset)
+        
     def post(self, request):
 
-        customer_data = Customer_Serializer(data=request.data)
+        d = request.data
 
-        if customer_data.is_valid():
+        new_customer_data = Customer(customer_name = d['customer_name'], address = d['address'], phone_number = d['phone_number'], age = d['age'], company_name = d['company_name'], member_since = d['member_since'])
 
-            customer_data.save()
+        new_customer_data.save()
 
-            return Response({'response': 'success', 'message': 'Data Saved'})
-
-        else:
-
-            return Response({'response': 'error', 'message': customer_data.errors})
+        return Response("New customer data added")
     
     def patch(self, request, id):
 
-        customer_get = Customer.objects.get(id=id)
+        d = request.data
 
-        customer_data = Customer_Serializer(customer_get, data=request.data, partial=True)
+        selected_customer = Customer.objects.filter(id = id)
 
-        if customer_data.is_valid():
+        selected_customer.update(customer_name = d['customer_name'], address = d['address'], phone_number = d['phone_number'], age = d['age'], company_name = d['company_name'], member_since = d['member_since'])
 
-            customer_data.save()
-
-            return Response({'response': 'success', 'message': 'Data Updated'})
-        
-        else:
-            
-            return Response({'response': 'error', 'message': customer_data.errors})
-
+        return Response("Customer data updated")
     
     def delete(self, request, id):
 
-        customer = Customer.objects.get(id=id)
+        selected_customer = Customer.objects.get(id = id)
 
-        customer.delete()
+        selected_customer.delete()
 
-        return Response({'response': 'success', 'message': 'Data Deleted'})
-    
+        return Response("Customer data deleted")
+
 
 class ProductView(APIView):
 
-    def get(self, request, id=None):
+    def get(self, request, id = None):
 
         if id == None:
 
-            product_all = Product.objects.all()
+            all_products = Product.objects.all()
 
-            product_data = Product_Serializer(product_all, many=True).data
+            all_product_data = Product_Serializer(all_products, many=True).data
 
-            return Response({'response': 'success', 'data': product_data})
+            return Response(all_product_data)
         
         else:
 
-            product_get = Product.objects.get(id=id)
+            selected_product = Product.objects.get(id = id)
 
-            product_data = Product_Serializer(product_get).data
+            product_data = Product_Serializer(selected_product).data
 
-            return Response({'response': 'success', 'data': product_data})
-    
+            return Response(product_data)
+        
     def post(self, request):
 
-        product_data = Product_Serializer(data=request.data)
+        new_product_data = Product_Serializer(data=request.data)
 
-        if product_data.is_valid():
+        if new_product_data.is_valid():
 
-            product_data.save()
+            new_product_data.save()
 
-        return Response({'response': 'success', 'message': 'Data Saved'})
+            return Response("Product data added")
+        
+        else:
+
+            return Response(new_product_data.errors)
     
     def patch(self, request, id):
 
-        product_get = Product.objects.get(id=id)
+        selected_product = Product.objects.get(id = id)
 
-        product_data = Product_Serializer(product_get, data=request.data, partial=True)
+        product_data = Product_Serializer(selected_product, data=request.data, partial=True)
 
         if product_data.is_valid():
 
             product_data.save()
 
-        return Response({'response': 'success', 'message': 'Data Updated'})
-    
+            return Response("Product data updated")
+        
+        else:
+
+            return Response(product_data.errors)
+        
     def delete(self, request, id):
 
-        product = Product.objects.get(id=id)
+        selected_product = Product.objects.get(id = id)
 
-        product.delete()
+        selected_product.delete()
 
-        return Response({'response': 'success', 'message': 'Data Deleted'})
+        return Response("Product data updated")
 
 
-class BillView(APIView):
+class OrderDetailsView(APIView):
 
-    def get(self, request, id=None):
+    def get(self, request, id = None):
 
         if id == None:
 
-            bill = Bill.objects.all()
+            all_orders = OrdersDetails.objects.all()
 
-            bill_data = Bill_Get_Serializer(bill, many=True).data
+            order_serializer = OrderDetails_Serializers(all_orders, many=True)
 
-            return Response({'response': 'success', 'data': bill_data})
+            return Response(order_serializer.data)
+        
+        else:
+
+            order = OrdersDetails.objects.get(id = id)
+
+            order_serializer = OrderDetails_Serializers(order)
+
+            return Response(order_serializer.data)
 
     def post(self, request):
 
-        data = request.data[0]
-        material_data = request.data[1]
+        details_data = request.data[0]
 
-        bill_details = Bill(customer_id = data['customer_id'], bill_number = data['bill_number'], bill_date = data['bill_date'], gst = data['gst'])
+        product_data = request.data[1]
 
-        bill_details.save()
+        order_details = OrdersDetails(customer_id = details_data['customer_id'], bill_date = details_data['bill_date'])
 
-        final_subtotal = 0
+        order_details.save()
 
-        for x in material_data:
+        product_sum = 0
 
-            product_price = Product.objects.get(id = x['product_id'])
+        for a in product_data:
 
-            subtotal_amount = product_price.price * x['count']
+            product = Product.objects.get(id = a['product_id'])
 
-            final_subtotal = final_subtotal + subtotal_amount
+            product_amount = a['quantity'] * product.price
 
-            bill_materials = BillMaterials(bill_id = bill_details.id, product_id = x['product_id'], count = x['count'], subtotal = subtotal_amount)
+            product_gst_amount = (product_amount * product.gst) / 100
 
-            bill_materials.save()
+            product_sub_total = product_amount + product_gst_amount
 
-        final_bill_amount = ((final_subtotal * data['gst']) / 100) + final_subtotal
+            product_sum = product_sum + product_sub_total
 
-        bill_filter = Bill.objects.filter(id = bill_details.id)
+            ordered_products = OrderedProducts(order_details_id = order_details.id, product_id = a['product_id'], quantity = a['quantity'], amount = product_amount, gst_amount = product_gst_amount, sub_total = product_sub_total)
 
-        bill_filter.update(total_amount = final_subtotal, bill_amount = final_bill_amount)
+            ordered_products.save()
 
-        return Response({'response': 'success', 'message': 'Data Saved'})
+        order_details_filter = OrdersDetails.objects.filter(id = order_details.id)
 
+        order_details_filter.update(bill_amount = product_sum)
+
+        return Response("Order Placed")
+    
     def patch(self, request, id):
 
-        data = request.data[0]
-        material_data = request.data[1]
+        details_data = request.data[0]
 
-        bill_filter = Bill.objects.filter(id = id)
+        product_data = request.data[1]
 
-        bill_filter.update(customer_id = data['customer_id'], bill_number = data['bill_number'], bill_date = data['bill_date'], gst = data['gst'])
+        order_filter = OrdersDetails.objects.filter(id = id)
+
+        order_filter.update(bill_date = details_data['bill_date'])
+
+        for a in product_data:
+
+            if a['new'] == True:
+
+                product = Product.objects.get(id = a['product_id'])
+
+                product_amount = a['quantity'] * product.price
+
+                product_gst_amount = (product_amount * product.gst) / 100
+
+                product_sub_total = product_amount + product_gst_amount
+
+                product_sum = product_sum + product_sub_total
+
+                ordered_products = OrderedProducts(order_details_id = id, product_id = a['product_id'], quantity = a['quantity'], amount = product_amount, gst_amount = product_gst_amount, sub_total = product_sub_total)
+
+                ordered_products.save()
+
+            elif a['delete'] == True:
+
+                product = OrderedProducts.objects.get(id = a['id'])
+
+                product.delete()
+
+            elif a['update'] == True:
+
+                ordered_product_filter = OrderedProducts.objects.filter(id = a['id'])
+
+                product = Product.objects.get(id = a['product_id'])
+
+                product_amount = a['quantity'] * product.price
+
+                product_gst_amount = (product_amount * product.gst) / 100
+
+                product_sub_total = product_amount + product_gst_amount
+
+                product_sum = product_sum + product_sub_total
+
+                ordered_product_filter.update(product_id = a['product_id'], quantity = a['quantity'], amount = product_amount, gst_amount = product_gst_amount, sub_total = product_sub_total)
+
+        products_to_order = OrderedProducts.objects.filter(order_details_id = id)
 
         final_subtotal = 0
 
-        for x in material_data:
+        for z in products_to_order:
 
-            product_price = Product.objects.get(id = x['product_id'])
+            final_subtotal = final_subtotal + z.sub_total
 
-            subtotal_amount = product_price.price * x['count']
-
-            final_subtotal = final_subtotal + subtotal_amount
-
-            bill_materials_filter = BillMaterials.objects.filter(id = x['id'])
-
-            bill_materials_filter.update(product_id = x['product_id'], count = x['count'], subtotal = subtotal_amount)
-
-        final_bill_amount = ((final_subtotal * data['gst']) / 100) + final_subtotal
-
-        bill_filter.update(total_amount = final_subtotal, bill_amount = final_bill_amount)
-
-        return Response({'response': 'success', 'message': 'Data Updated'})
-
+        return Response("Order data updated")
+    
     def delete(self, request, id):
 
-        bill = Bill.objects.get(id = id)
+        order = OrdersDetails.objects.get(id = id)
 
-        bill.delete()
+        order.delete()
 
-        return Response({'response': 'success', 'message': 'Data Deleted'})
+        return Response("Order data deleted")
+
+
+class MyTokenObtainPairSerializer(TokenObtainPairSerializer):
+    
+    @classmethod
+    def get_token(cls, user):
+
+        token = super().get_token(user)
+
+        token['username'] = user.username
+
+        return token
+
+
+class MyTokenObtainPairView(TokenObtainPairView):
+
+    serializer_class = MyTokenObtainPairSerializer
+
+
+

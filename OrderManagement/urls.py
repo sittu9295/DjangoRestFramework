@@ -1,15 +1,16 @@
 from django.urls import path
 from .views import *
+from rest_framework_simplejwt.views import TokenRefreshView
 
 urlpatterns = [
-    path('basic/', BasicApiView.as_view()),
-
     path('customer/', CustomerView.as_view()),
     path('customer/<int:id>/', CustomerView.as_view()),
-
     path('product/', ProductView.as_view()),
     path('product/<int:id>/', ProductView.as_view()),
 
-    path('bill/', BillView.as_view()),
-    path('bill/<int:id>/', BillView.as_view()),
+    path('order/', OrderDetailsView.as_view()),
+    path('order/<int:id>/', OrderDetailsView.as_view()),
+
+    path('token/', MyTokenObtainPairView.as_view()),
+    path('token/refresh/', TokenRefreshView.as_view()),
 ]

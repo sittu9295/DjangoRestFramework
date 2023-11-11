@@ -1,13 +1,13 @@
 from rest_framework import serializers
 from .models import *
 
+
 class Customer_Serializer(serializers.ModelSerializer):
 
     class Meta:
 
         model = Customer
-        fields = '__all__' 
-
+        fields = '__all__'
 
 
 class Product_Serializer(serializers.ModelSerializer):
@@ -17,29 +17,21 @@ class Product_Serializer(serializers.ModelSerializer):
         model = Product
         fields = '__all__'
 
-class Bill_Serializer(serializers.ModelSerializer):
+
+class OrderedProducts_Serializer(serializers.ModelSerializer):
 
     class Meta:
 
-        model = Bill
+        model = OrderedProducts
         fields = '__all__'
 
-class BillMaterials_Serializer(serializers.ModelSerializer):
+
+class OrderDetails_Serializers(serializers.ModelSerializer):
+
+    customer = Customer_Serializer()
+    bill_products = OrderedProducts_Serializer(many=True)
 
     class Meta:
 
-        model = BillMaterials
+        model = OrdersDetails
         fields = '__all__'
-
-
-
-class Bill_Get_Serializer(serializers.ModelSerializer):
-
-    bill_products = BillMaterials_Serializer(many=True)
-
-    class Meta:
-
-        model = Bill
-        fields = '__all__'
-
-
