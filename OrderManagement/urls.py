@@ -13,4 +13,6 @@ urlpatterns = [
 
     path('token/', MyTokenObtainPairView.as_view()),
     path('token/refresh/', TokenRefreshView.as_view()),
+
+    path('test/post/', Test.as_view()),
 ]

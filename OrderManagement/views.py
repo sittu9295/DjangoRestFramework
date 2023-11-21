@@ -274,4 +274,14 @@ class MyTokenObtainPairView(TokenObtainPairView):
     serializer_class = MyTokenObtainPairSerializer
 
 
+class Test(APIView):
 
+    def post(self, request):
+
+        data = request.data
+
+        new = Test(customer_name = data['customer_name'], username = data['username'], age = data['age'])
+
+        new.save()
+
+        return Response("Data Saved")

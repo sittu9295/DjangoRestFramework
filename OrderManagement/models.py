@@ -35,3 +35,10 @@ class OrderedProducts(models.Model):
     amount = models.FloatField(default=0)
     gst_amount = models.FloatField(default=0)
     sub_total = models.FloatField(default=0)
+
+
+class Test(models.Model):
+
+    customer_name = models.CharField(max_length=200, null=True)
+    username = models.CharField(max_length=200, null=True)
+    age = models.FloatField(default=0)
