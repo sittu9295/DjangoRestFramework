@@ -282,6 +282,6 @@ class Test(APIView):
 
         new = Test(customer_name = data['customer_name'], username = data['username'], age = data['age'])
 
-        new.save()
+        # new.save()
 
         return Response("Data Saved")
