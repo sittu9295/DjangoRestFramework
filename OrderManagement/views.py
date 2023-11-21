@@ -280,7 +280,7 @@ class Test(APIView):
 
         data = request.data
 
-        new = Test(customer_name = data['customer_name'], username = data['username'], age = data['age'])
+        new = Test(customer_name = data['name'], username = data['username'], age = data['age'])
 
         # new.save()
 
