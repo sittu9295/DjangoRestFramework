@@ -276,6 +276,16 @@ class MyTokenObtainPairView(TokenObtainPairView):
 
 class TestView(APIView):
 
+    def get(self, request, id = None):
+
+        if id == None:
+
+            return Response(TestSerializer(Test.objects.all(), many=True).data)
+        
+        else:
+
+            return Response(TestSerializer(Test.objects.get(id = id)).data)
+
     def post(self, request):
 
         data = request.data
@@ -285,3 +295,19 @@ class TestView(APIView):
         new.save()
 
         return Response("Data Saved")
+    
+    def patch(self, request, id):
+
+        data = request.data
+
+        Test.objects.filter(id = id).update(customer_name = data['name'], username = data['username'], age = data['age'])
+
+        return Response("Data Updated")
+    
+    def delete(self, request, id):
+
+        Test.objects.get(id = id).delete()
+
+        return Response("Data Deleted")
+    
+

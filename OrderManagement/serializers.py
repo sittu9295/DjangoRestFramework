@@ -35,3 +35,11 @@ class OrderDetails_Serializers(serializers.ModelSerializer):
 
         model = OrdersDetails
         fields = '__all__'
+
+
+class TestSerializer(serializers.ModelSerializer):
+
+    class Meta:
+
+        model = Test
+        fields = '__all__'
