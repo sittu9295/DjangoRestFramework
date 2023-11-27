@@ -285,3 +285,30 @@ class TestView(APIView):
         new.save()
 
         return Response("Data Saved")
+
+
+class Sample(APIView):
+
+    def get(self, request):
+
+        dataset = {
+            "Django": True
+        }
+
+        return Response(dataset)
+
+    def post(self,request):
+
+        pass
+
+    def patch(self,request):
+
+        pass
+
+    def put(self,request):
+
+        pass
+
+    def delete(self,request):
+
+        pass

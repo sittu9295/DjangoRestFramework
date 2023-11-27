@@ -15,4 +15,6 @@ urlpatterns = [
     path('token/refresh/', TokenRefreshView.as_view()),
 
     path('test/post/', TestView.as_view()),
+
+    path('sample/', Sample.as_view()),
 ]
